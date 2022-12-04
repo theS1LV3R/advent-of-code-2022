@@ -1,11 +1,11 @@
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-let pointsMap: Record<string, number> = {};
+const pointsMap: Record<string, number> = {};
 // Capitals
 for (let i = 1; i <= 26; i++) {
   const capitalChar = String.fromCharCode(i + 64);
@@ -15,20 +15,20 @@ for (let i = 1; i <= 26; i++) {
   pointsMap[capitalChar] = i + 26;
 }
 
-const lines = readFileSync(resolve(__dirname, "input.txt"))
+const lines = readFileSync(resolve(__dirname, 'input.txt'))
   .toString()
-  .split("\n")
-  .filter((line) => line !== "");
+  .split('\n')
+  .filter((line) => line !== '');
 const sacks = lines.map((line) => [
   line.substring(0, line.length / 2),
   line.substring(line.length / 2),
 ]);
 
 const inBoth = sacks.map((line) => {
-  const seen = line[0].split("");
-  let inBothInternal = "";
+  const seen = line[0].split('');
+  let inBothInternal = '';
 
-  line[1].split("").forEach((char) => {
+  line[1].split('').forEach((char) => {
     if (seen.includes(char)) {
       inBothInternal = char;
     }
@@ -44,7 +44,7 @@ const points = inBoth
 
 console.log(points);
 
-let groups: string[][] = [];
+const groups: string[][] = [];
 lines.forEach((line, index) => {
   const group = (index - (index % 3)) / 3;
 
@@ -60,7 +60,7 @@ const groupSame = groups.map((group) => {
 
   group.forEach((member) => {
     const seenInMember: string[] = [];
-    member.split("").forEach((char) => {
+    member.split('').forEach((char) => {
       if (seenInMember.includes(char)) {
         return;
       } else {
@@ -75,7 +75,8 @@ const groupSame = groups.map((group) => {
     });
   });
 
-  return Object.entries(seen).find(([k, v]) => v === 3)![0];
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return Object.entries(seen).find(([_k, v]) => v === 3)![0];
 });
 
 const groupPoints = groupSame

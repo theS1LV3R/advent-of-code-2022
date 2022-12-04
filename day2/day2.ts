@@ -1,16 +1,16 @@
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-type SplitLine = ["A" | "B" | "C", "X" | "Y" | "Z"];
+type SplitLine = ['A' | 'B' | 'C', 'X' | 'Y' | 'Z'];
 
-const lines = readFileSync(resolve(__dirname, "input.txt"))
+const lines = readFileSync(resolve(__dirname, 'input.txt'))
   .toString()
-  .split("\n")
-  .filter((l) => l !== "") as `${"A" | "B" | "C"} ${"X" | "Y" | "Z"}`[];
+  .split('\n')
+  .filter((l) => l !== '') as `${'A' | 'B' | 'C'} ${'X' | 'Y' | 'Z'}`[];
 
 /*
 --- Day 2: Rock Paper Scissors ---
@@ -48,33 +48,33 @@ What would your total score be if everything goes exactly according to your stra
 let points = 0;
 
 const equivalents = {
-  A: "X", // Rock
-  B: "Y", // Paper
-  C: "Z", // Scissors
+  A: 'X', // Rock
+  B: 'Y', // Paper
+  C: 'Z', // Scissors
 
-  X: "A", // Rock
-  Y: "B", // Paper
-  Z: "C", // Scissors
+  X: 'A', // Rock
+  Y: 'B', // Paper
+  Z: 'C', // Scissors
 } as const;
 
 const winsOverEach = {
-  A: "Z", // Rock
-  B: "X", // Paper
-  C: "Y", // Scissors
+  A: 'Z', // Rock
+  B: 'X', // Paper
+  C: 'Y', // Scissors
 
-  X: "C", // Rock
-  Y: "A", // Paper
-  Z: "B", // Scissors
+  X: 'C', // Rock
+  Y: 'A', // Paper
+  Z: 'B', // Scissors
 } as const;
 
 const losesToEach = {
-  A: "Y",
-  B: "Z",
-  C: "X",
+  A: 'Y',
+  B: 'Z',
+  C: 'X',
 
-  X: "B",
-  Y: "C",
-  Z: "A",
+  X: 'B',
+  Y: 'C',
+  Z: 'A',
 } as const;
 
 const pointMap = {
@@ -83,8 +83,8 @@ const pointMap = {
   Z: 3,
 } as const;
 
-for (let line of lines) {
-  const [opponent, me] = line.split(" ") as SplitLine;
+for (const line of lines) {
+  const [opponent, me] = line.split(' ') as SplitLine;
   let roundScore = 0;
 
   if (winsOverEach[opponent] === me) {
@@ -133,22 +133,22 @@ if everything goes exactly according to your strategy guide?
 
 points = 0;
 
-for (let line of lines) {
-  const [opponent, requiredResult] = line.split(" ") as SplitLine;
+for (const line of lines) {
+  const [opponent, requiredResult] = line.split(' ') as SplitLine;
 
   let myAction: typeof winsOverEach[keyof typeof winsOverEach];
   let roundPoints = 0;
 
   switch (requiredResult) {
-    case "X": // Loss
+    case 'X': // Loss
       myAction = winsOverEach[opponent];
       roundPoints += 0;
       break;
-    case "Y": // Draw
+    case 'Y': // Draw
       myAction = equivalents[opponent];
       roundPoints += 3;
       break;
-    case "Z": // Win
+    case 'Z': // Win
       myAction = losesToEach[opponent];
       roundPoints += 6;
       break;

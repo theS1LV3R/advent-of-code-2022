@@ -1,14 +1,14 @@
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const lines = readFileSync(resolve(__dirname, "input.txt"))
+const lines = readFileSync(resolve(__dirname, 'input.txt'))
   .toString()
-  .split("\n")
-  .filter((line) => line !== "");
+  .split('\n')
+  .filter((line) => line !== '');
 
 /*
 --- Day 4: Camp Cleanup ---
@@ -85,10 +85,10 @@ type Range = {
 type Pair = [Range, Range];
 
 const pairs: Pair[] = lines.map((line): Pair => {
-  const [elf1, elf2] = line.split(",");
+  const [elf1, elf2] = line.split(',');
 
-  const [elf1Start, elf1End] = elf1.split("-").map((s) => parseInt(s, 10));
-  const [elf2Start, elf2End] = elf2.split("-").map((s) => parseInt(s, 10));
+  const [elf1Start, elf1End] = elf1.split('-').map((s) => parseInt(s, 10));
+  const [elf2Start, elf2End] = elf2.split('-').map((s) => parseInt(s, 10));
 
   return [
     { start: elf1Start, end: elf1End },

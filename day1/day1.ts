@@ -1,15 +1,32 @@
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const lines = readFileSync(resolve(__dirname, "input.txt"))
+const lines = readFileSync(resolve(__dirname, 'input.txt'))
   .toString()
-  .split("\n");
+  .split('\n');
 
 /*
+--- Day 1: Calorie Counting ---
+
+Santa's reindeer typically eat regular reindeer food, but they need a lot
+of magical energy to deliver presents on Christmas. For that, their
+favorite snack is a special type of star fruit that only grows deep in the
+jungle. The Elves have brought you on their annual expedition to the grove
+where the fruit grows.
+
+To supply enough magical energy, the expedition needs to retrieve a minimum
+of fifty stars by December 25th. Although the Elves assure you that the
+grove has plenty of fruit, you decide to grab any fruit you see along the
+way, just in case.
+
+Collect stars by solving puzzles. Two puzzles will be made available on
+each day in the Advent calendar; the second puzzle is unlocked when you
+complete the first. Each puzzle grants one star. Good luck!
+
 The jungle must be too overgrown and difficult to navigate in vehicles or
 access from the air; the Elves' expedition traditionally goes on foot. As
 your boats approach land, the Elves begin taking inventory of their
@@ -64,8 +81,8 @@ Elf carrying**?
 const elves: number[] = [];
 
 let elf = 0;
-lines.forEach((line, index) => {
-  if (line === "") {
+lines.forEach((line) => {
+  if (line === '') {
     elves.push(elf);
     elf = 0;
     return;
@@ -84,6 +101,7 @@ elves.forEach((elf, index) => {
   }
 });
 
+// Your puzzle answer was `71502`.
 console.log(largestElf);
 
 /*
@@ -110,7 +128,7 @@ those Elves carrying in total?**
 // .sort sorts in reverse for some reason idk
 const sortedElves = elves.sort((a, b) => b - a);
 
-function sumN(arr: any[], n: number): number {
+function sumN(arr: number[], n: number): number {
   let sum = 0;
 
   for (let i = 0; i < n; i++) {
@@ -120,4 +138,5 @@ function sumN(arr: any[], n: number): number {
   return sum;
 }
 
+// Your puzzle answer was `208191`.
 console.log(sumN(sortedElves, 3));
