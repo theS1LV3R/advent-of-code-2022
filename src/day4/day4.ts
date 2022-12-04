@@ -1,14 +1,6 @@
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { getLines } from '../base';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const lines = readFileSync(resolve(__dirname, 'input.txt'))
-  .toString()
-  .split('\n')
-  .filter((line) => line !== '');
+const lines = getLines(import.meta.url).filter((line) => line !== '');
 
 /*
 --- Day 4: Camp Cleanup ---

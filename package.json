@@ -9,11 +9,13 @@
   "license": "MPL-2.0",
   "type": "module",
   "scripts": {
-    "debug": "node --loader ts-node/esm",
+    "debug": "node --loader ts-node/esm --experimental-specifier-resolution=node",
     "build": "run-s clean compile postbuild",
+    "runall": "pnpm run debug src/runAll.ts",
+    "start": "node --experimental-specifier-resolution=node dist/runAll.js",
     "clean": "rm -rf dist",
     "compile": "tsc",
-    "postbuild": "files=(src/*/input.txt); for file in $files; do cp $file dist/${file/src\\//}; done",
+    "postbuild": "files=(src/*/input.txt); for file in ${files[@]}; do echo $file; cp $file dist/${file/src\\//}; done",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {

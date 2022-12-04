@@ -1,14 +1,6 @@
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { getLines } from '../base';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const lines = readFileSync(resolve(__dirname, 'input.txt'))
-  .toString()
-  .split('\n');
-
+const lines = getLines(import.meta.url);
 /*
 --- Day 1: Calorie Counting ---
 
@@ -102,7 +94,7 @@ elves.forEach((elf, index) => {
 });
 
 // Your puzzle answer was `71502`.
-console.log(`Day 1.1: ${largestElf}`);
+console.log(`Day 1.1: ${largestElf.num}`);
 
 /*
 --- Part Two ---

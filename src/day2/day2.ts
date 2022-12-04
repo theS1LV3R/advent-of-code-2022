@@ -1,16 +1,8 @@
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { getLines } from '../base';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-type SplitLine = ['A' | 'B' | 'C', 'X' | 'Y' | 'Z'];
-
-const lines = readFileSync(resolve(__dirname, 'input.txt'))
-  .toString()
-  .split('\n')
-  .filter((l) => l !== '') as `${'A' | 'B' | 'C'} ${'X' | 'Y' | 'Z'}`[];
+const lines = getLines<`${'A' | 'B' | 'C'} ${'X' | 'Y' | 'Z'}` | ''>(
+  import.meta.url,
+).filter((l) => l !== '');
 
 /*
 --- Day 2: Rock Paper Scissors ---
@@ -73,7 +65,7 @@ strategy guide?**
 
 */
 
-let points = 0;
+type SplitLine = ['A' | 'B' | 'C', 'X' | 'Y' | 'Z'];
 
 const equivalents = {
   A: 'X', // Rock
@@ -110,6 +102,8 @@ const pointMap = {
   Y: 2,
   Z: 3,
 } as const;
+
+let points = 0;
 
 for (const line of lines) {
   const [opponent, me] = line.split(' ') as SplitLine;
