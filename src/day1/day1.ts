@@ -102,7 +102,7 @@ elves.forEach((elf, index) => {
 });
 
 // Your puzzle answer was `71502`.
-console.log(largestElf);
+console.log(`Day 1.1: ${largestElf}`);
 
 /*
 --- Part Two ---
@@ -139,4 +139,4 @@ function sumN(arr: number[], n: number): number {
 }
 
 // Your puzzle answer was `208191`.
-console.log(sumN(sortedElves, 3));
+console.log(`Day 1.2: ${sumN(sortedElves, 3)}`);

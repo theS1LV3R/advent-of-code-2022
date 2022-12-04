@@ -108,7 +108,8 @@ for (const pair of pairs) {
   }
 }
 
-console.log(fullyOverlappingPairs);
+// Your puzzle answer was `560`.
+console.log(`Day 4.1: ${fullyOverlappingPairs}`);
 
 /*
 --- Part Two ---
@@ -143,4 +144,5 @@ for (const pair of pairs) {
   }
 }
 
-console.log(partlyOverlappingPairs);
+// Your puzzle answer was `839`.
+console.log(`Day 4.2: ${partlyOverlappingPairs}`);
