@@ -16,7 +16,7 @@
     "clean": "rm -rf dist",
     "compile": "tsc",
     "postbuild": "files=(src/*/input.txt); for file in ${files[@]}; do echo $file; cp $file dist/${file/src\\//}; done",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint --fix src --ext ts"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "1.2.0",
