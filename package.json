@@ -1,19 +1,21 @@
 {
-  "name": "adventofcode",
+  "name": "adventofcode-2022",
   "version": "1.0.0",
-  "description": "",
+  "description": "My solution to the Advent of Code challenges in 2022",
+  "keywords": [
+    "adventofcode"
+  ],
+  "author": "S1lV3R <me@s1lv3r.codes> (https://s1lv3r.codes)",
+  "license": "MPL-2.0",
   "type": "module",
   "scripts": {
     "debug": "node --loader ts-node/esm",
     "build": "run-s clean compile postbuild",
     "clean": "rm -rf dist",
     "compile": "tsc",
-    "postbuild": "files=(src/*/input.txt); for file in $files; do cp $file dist/${file/src\//}; done",
+    "postbuild": "files=(src/*/input.txt); for file in $files; do cp $file dist/${file/src\\//}; done",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@rushstack/eslint-patch": "1.2.0",
     "@types/eslint": "8.4.10",
