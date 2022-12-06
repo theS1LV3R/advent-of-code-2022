@@ -1,4 +1,4 @@
-import { getLines } from '../base';
+import { getLines } from "../../util/index.ts";
 
 const lines = getLines(import.meta.url);
 /*
@@ -74,7 +74,7 @@ const elves: number[] = [];
 
 let elf = 0;
 lines.forEach((line) => {
-  if (line === '') {
+  if (line === "") {
     elves.push(elf);
     elf = 0;
     return;

@@ -1,4 +1,4 @@
-import { getLines } from '../base';
+import { getLines } from "../../util/index.ts";
 
 const lines = getLines(import.meta.url);
 

@@ -137,3 +137,14 @@ dist
 
 # SvelteKit build / generate output
 .svelte-kit
+
+### Deno ###
+/.idea/
+/.vscode/
+
+/node_modules
+
+.env
+*.orig
+*.pyc
+*.swp

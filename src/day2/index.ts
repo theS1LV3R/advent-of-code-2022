@@ -1,4 +1,4 @@
-import { getLines } from '../base';
+import { getLines } from "../../util/index.ts";
 
 const lines = getLines<`${'A' | 'B' | 'C'} ${'X' | 'Y' | 'Z'}` | ''>(
   import.meta.url,

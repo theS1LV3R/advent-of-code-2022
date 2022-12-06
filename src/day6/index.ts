@@ -1,4 +1,4 @@
-import { getLines } from '../base';
+import { getLines } from "../../util/index.ts";
 
 const lines = getLines(import.meta.url);
 
@@ -91,8 +91,8 @@ function findNUnique(input: string | string[], number: number): number {
   let indexOfUnique = 0;
 
   // Allow to pass in a line instead of a bunch of chars, so split them up
-  if (typeof input === 'string') {
-    input = input.split('');
+  if (typeof input === "string") {
+    input = input.split("");
   }
 
   // Loop over each char

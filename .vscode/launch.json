@@ -1,14 +1,14 @@
 {
   "configurations": [
     {
-      "name": "Debug with pnpm",
       "request": "launch",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["run-script", "debug"],
-      "args": ["${file}"],
-      "skipFiles": ["<node_internals>/**"],
-      "cwd": "${fileDirname}",
-      "type": "node"
+      "name": "Debug deno",
+      "type": "pwa-node",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "deno",
+      "runtimeArgs": ["run", "--unstable", "--inspect-brk", "--allow-all"],
+      "attachSimplePort": 9229,
+      "program": "${file}"
     }
   ]
 }
