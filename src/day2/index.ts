@@ -1,10 +1,47 @@
 import { getLines } from "../../util/index.ts";
 
-const lines = getLines<`${'A' | 'B' | 'C'} ${'X' | 'Y' | 'Z'}` | ''>(
-  import.meta.url,
-).filter((l) => l !== '');
+type SplitLine = ["A" | "B" | "C", "X" | "Y" | "Z"];
+const lines = getLines<`${SplitLine[0]} ${SplitLine[1]}` | "">(
+  import.meta.url
+).filter((l) => l !== "");
 
-/*
+const equivalents = {
+  A: "X", // Rock
+  B: "Y", // Paper
+  C: "Z", // Scissors
+
+  X: "A", // Rock
+  Y: "B", // Paper
+  Z: "C", // Scissors
+} as const;
+
+const winsOverEach = {
+  A: "Z", // Rock
+  B: "X", // Paper
+  C: "Y", // Scissors
+
+  X: "C", // Rock
+  Y: "A", // Paper
+  Z: "B", // Scissors
+} as const;
+
+const losesToEach = {
+  A: "Y",
+  B: "Z",
+  C: "X",
+
+  X: "B",
+  Y: "C",
+  Z: "A",
+} as const;
+
+const pointMap = {
+  X: 1,
+  Y: 2,
+  Z: 3,
+} as const;
+
+/**
 --- Day 2: Rock Paper Scissors ---
 
 The Elves begin to set up camp on the beach. To decide whose tent gets to
@@ -64,68 +101,32 @@ total score of **`15`** (8 + 1 + 6).
 strategy guide?**
 
 */
+export function part1(isTest = false) {
+  let points = 0;
 
-type SplitLine = ['A' | 'B' | 'C', 'X' | 'Y' | 'Z'];
+  for (const line of lines) {
+    const [opponent, me] = line.split(" ") as SplitLine;
+    let roundScore = 0;
 
-const equivalents = {
-  A: 'X', // Rock
-  B: 'Y', // Paper
-  C: 'Z', // Scissors
+    if (winsOverEach[opponent] === me) {
+      roundScore += 0;
+    } else if (equivalents[opponent] === me) {
+      roundScore += 3;
+    } else {
+      roundScore += 6;
+    }
 
-  X: 'A', // Rock
-  Y: 'B', // Paper
-  Z: 'C', // Scissors
-} as const;
+    roundScore += pointMap[me];
 
-const winsOverEach = {
-  A: 'Z', // Rock
-  B: 'X', // Paper
-  C: 'Y', // Scissors
-
-  X: 'C', // Rock
-  Y: 'A', // Paper
-  Z: 'B', // Scissors
-} as const;
-
-const losesToEach = {
-  A: 'Y',
-  B: 'Z',
-  C: 'X',
-
-  X: 'B',
-  Y: 'C',
-  Z: 'A',
-} as const;
-
-const pointMap = {
-  X: 1,
-  Y: 2,
-  Z: 3,
-} as const;
-
-let points = 0;
-
-for (const line of lines) {
-  const [opponent, me] = line.split(' ') as SplitLine;
-  let roundScore = 0;
-
-  if (winsOverEach[opponent] === me) {
-    roundScore += 0;
-  } else if (equivalents[opponent] === me) {
-    roundScore += 3;
-  } else {
-    roundScore += 6;
+    points += roundScore;
   }
 
-  roundScore += pointMap[me];
-
-  points += roundScore;
+  // Your puzzle answer was `15691`.
+  if (!isTest) console.log(`Day 2.1: ${points}`);
+  return points;
 }
 
-// Your puzzle answer was `15691`.
-console.log(`Day 2.1: ${points}`);
-
-/*
+/**
 --- Part Two ---
 
 The Elf finishes helping with the tent and sneaks back over to you.
@@ -151,33 +152,35 @@ you would get a total score of **`12`**.
 Following the Elf's instructions for the second column, **what would your
 total score be if everything goes exactly according to your strategy guide?**
 */
+export function part2(isTest = false) {
+  let points = 0;
 
-points = 0;
+  for (const line of lines) {
+    const [opponent, requiredResult] = line.split(" ") as SplitLine;
 
-for (const line of lines) {
-  const [opponent, requiredResult] = line.split(' ') as SplitLine;
+    let myAction: typeof winsOverEach[keyof typeof winsOverEach];
+    let roundPoints = 0;
 
-  let myAction: typeof winsOverEach[keyof typeof winsOverEach];
-  let roundPoints = 0;
+    switch (requiredResult) {
+      case "X": // Loss
+        myAction = winsOverEach[opponent];
+        roundPoints += 0;
+        break;
+      case "Y": // Draw
+        myAction = equivalents[opponent];
+        roundPoints += 3;
+        break;
+      case "Z": // Win
+        myAction = losesToEach[opponent];
+        roundPoints += 6;
+        break;
+    }
 
-  switch (requiredResult) {
-    case 'X': // Loss
-      myAction = winsOverEach[opponent];
-      roundPoints += 0;
-      break;
-    case 'Y': // Draw
-      myAction = equivalents[opponent];
-      roundPoints += 3;
-      break;
-    case 'Z': // Win
-      myAction = losesToEach[opponent];
-      roundPoints += 6;
-      break;
+    roundPoints += pointMap[myAction];
+    points += roundPoints;
   }
 
-  roundPoints += pointMap[myAction];
-  points += roundPoints;
+  // Your puzzle answer was `12989`.
+  if (!isTest) console.log(`Day 2.2: ${points}`);
+  return points;
 }
-
-// Your puzzle answer was `12989`.
-console.log(`Day 2.2: ${points}`);

@@ -2,7 +2,61 @@ import { getLines } from "../../util/index.ts";
 
 const lines = getLines(import.meta.url);
 
-/*
+const ROWS = 9;
+const ROW_WIDTH = 4;
+const INSTR_START = 10;
+
+function loadStacks() {
+  const stacks: string[][] = [];
+
+  for (let i = 0; i < ROWS; i++) stacks.push([]);
+
+  for (const line of lines) {
+    if (line.startsWith(" 1   2")) break; // First line of just numbers
+
+    for (let row = 0; row < ROWS; row++) {
+      const letter = line[row * ROW_WIDTH + 1];
+
+      if (letter === " ") continue;
+
+      stacks[row].unshift(letter);
+    }
+  }
+
+  return stacks;
+}
+
+function moveCrates(
+  stacks: string[][],
+  count: number,
+  source: number,
+  dest: number,
+  reverse = true
+) {
+  let toBeMoved = stacks[source].splice(-count);
+
+  if (reverse) toBeMoved = toBeMoved.reverse();
+
+  stacks[dest].push(...toBeMoved);
+}
+
+function getInstr(line: string) {
+  const instruction =
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    /move (?<count>\d+) from (?<source>\d+) to (?<dest>\d+)/gi.exec(line)!;
+
+  const count = parseInt(instruction[1]);
+  const source = parseInt(instruction[2]) - 1;
+  const dest = parseInt(instruction[3]) - 1;
+
+  return { count, source, dest };
+}
+
+function getStackString(stacks: string[][]) {
+  return stacks.map((stack) => stack.slice(-1)).join("");
+}
+
+/**
 --- Day 5: Supply Stacks ---
 
 The expedition can depart as soon as the final supplies have been unloaded
@@ -90,76 +144,29 @@ in this example, the top crates are `C` in stack 1, `M` in stack 2, and `Z` in
 stack 3, so you should combine these together and give the Elves the
 message **`CMZ`**.
 
-**After the rearrangement procedure completes, what crate ends up on top of
+* **After the rearrangement procedure completes, what crate ends up on top of
 each stack?**
 
 */
+export function part1(isTest = false) {
+  const stack = loadStacks();
 
-const ROWS = 9;
-const ROW_WIDTH = 4;
-const INSTR_START = 10;
+  lines.forEach((line, index) => {
+    if (index < INSTR_START || line === "") return; // Skip all lines that dont contain instructions
 
-let stacks: string[][] = [];
-function loadStacks() {
-  stacks = [];
+    const { count, source, dest } = getInstr(line);
 
-  for (let i = 0; i < ROWS; i++) stacks.push([]);
+    moveCrates(stack, count, source, dest);
+  });
 
-  for (const line of lines) {
-    if (line.startsWith(' 1   2')) break; // First line of just numbers
+  const stackString = getStackString(stack);
 
-    for (let row = 0; row < ROWS; row++) {
-      const letter = line[row * ROW_WIDTH + 1];
-
-      if (letter === ' ') continue;
-
-      stacks[row].unshift(letter);
-    }
-  }
-}
-loadStacks();
-
-function moveCrates(
-  count: number,
-  source: number,
-  dest: number,
-  reverse = true,
-) {
-  let toBeMoved = stacks[source].splice(-count);
-
-  if (reverse) toBeMoved = toBeMoved.reverse();
-
-  stacks[dest].push(...toBeMoved);
+  // Your puzzle answer was FWSHSPJWM.
+  if (!isTest) console.log(`Day 5.1 ${stackString}`);
+  return stackString;
 }
 
-function getInstr(line: string) {
-  const instruction =
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    /move (?<count>\d+) from (?<source>\d+) to (?<dest>\d+)/gi.exec(line)!;
-
-  const count = parseInt(instruction[1]);
-  const source = parseInt(instruction[2]) - 1;
-  const dest = parseInt(instruction[3]) - 1;
-
-  return { count, source, dest };
-}
-
-function getStackString() {
-  return stacks.map((stack) => stack.slice(-1)).join('');
-}
-
-lines.forEach((line, index) => {
-  if (index < INSTR_START || line === '') return; // Skip all lines that dont contain instructions
-
-  const { count, source, dest } = getInstr(line);
-
-  moveCrates(count, source, dest);
-});
-
-// Your puzzle answer was FWSHSPJWM.
-console.log(`Day 5.1 ${getStackString()}`);
-
-/*
+/**
 --- Part Two ---
 
 As you watch the crane operator expertly rearrange the crates, you notice
@@ -176,19 +183,19 @@ Again considering the example above, the crates begin in the same
 configuration:
 
 ```
-    [D]    
-[N] [C]    
+    [D]
+[N] [C]
 [Z] [M] [P]
- 1   2   3 
+ 1   2   3
 ```
 
 Moving a single crate from stack 2 to stack 1 behaves the same as before:
 
 ```
-[D]        
-[N] [C]    
+[D]
+[N] [C]
 [Z] [M] [P]
- 1   2   3 
+ 1   2   3
 ```
 
 However, the action of moving three crates from stack 1 to stack 3 means
@@ -232,17 +239,20 @@ Before the rearrangement process finishes, update your simulation so that
 the Elves know where they should stand to be ready to unload the final
 supplies. **After the rearrangement procedure completes, what crate ends up
 on top of each stack?**
-
 */
+export function part2(isTest = false) {
+  const stack = loadStacks();
+  lines.forEach((line, index) => {
+    if (index < INSTR_START || line === "") return; // Skip all lines that dont contain instructions
 
-loadStacks();
-lines.forEach((line, index) => {
-  if (index < INSTR_START || line === '') return; // Skip all lines that dont contain instructions
+    const { count, source, dest } = getInstr(line);
 
-  const { count, source, dest } = getInstr(line);
+    moveCrates(stack, count, source, dest, false);
+  });
 
-  moveCrates(count, source, dest, false);
-});
+  const stackString = getStackString(stack)
 
-// Your puzzle answer was PWPWHGFZS.
-console.log(`Day 5.2 ${getStackString()}`);
+  // Your puzzle answer was PWPWHGFZS.
+  if (!isTest) console.log(`Day 5.2 ${stackString}`);
+  return stackString
+}

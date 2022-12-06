@@ -1,7 +1,21 @@
 import { getLines } from "../../util/index.ts";
 
 const lines = getLines(import.meta.url);
-/*
+
+const elves: number[] = [];
+
+let elf = 0;
+lines.forEach((line) => {
+  if (line === "") {
+    elves.push(elf);
+    elf = 0;
+    return;
+  }
+
+  elf += parseInt(line, 10);
+});
+
+/**
 --- Day 1: Calorie Counting ---
 
 Santa's reindeer typically eat regular reindeer food, but they need a lot
@@ -69,34 +83,23 @@ Elf carrying the **most** Calories. In the example above, this is `24000`
 Find the Elf carrying the most Calories. **How many total Calories is that
 Elf carrying**?
 */
+export function part1(isTest = false) {
+  let largestElf = { num: 0, index: 0 };
+  elves.forEach((elf, index) => {
+    if (elf > largestElf.num) {
+      largestElf = {
+        num: elf,
+        index,
+      };
+    }
+  });
 
-const elves: number[] = [];
+  // Your puzzle answer was `71502`.
+  if (!isTest) console.log(`Day 1.1: ${largestElf.num}`);
+  return largestElf.num;
+}
 
-let elf = 0;
-lines.forEach((line) => {
-  if (line === "") {
-    elves.push(elf);
-    elf = 0;
-    return;
-  }
-
-  elf += parseInt(line, 10);
-});
-
-let largestElf = { num: 0, index: 0 };
-elves.forEach((elf, index) => {
-  if (elf > largestElf.num) {
-    largestElf = {
-      num: elf,
-      index,
-    };
-  }
-});
-
-// Your puzzle answer was `71502`.
-console.log(`Day 1.1: ${largestElf.num}`);
-
-/*
+/**
 --- Part Two ---
 
 By the time you calculate the answer to the Elves' question, they've
@@ -116,19 +119,23 @@ is `45000`.
 Find the top three Elves carrying the most Calories. **How many Calories are
 those Elves carrying in total?**
 */
+export function part2(isTest = false) {
+  // .sort sorts in reverse for some reason idk
+  const sortedElves = elves.sort((a, b) => b - a);
 
-// .sort sorts in reverse for some reason idk
-const sortedElves = elves.sort((a, b) => b - a);
+  function sumN(arr: number[], n: number): number {
+    let sum = 0;
 
-function sumN(arr: number[], n: number): number {
-  let sum = 0;
+    for (let i = 0; i < n; i++) {
+      sum += arr[i];
+    }
 
-  for (let i = 0; i < n; i++) {
-    sum += arr[i];
+    return sum;
   }
 
+  const sum = sumN(sortedElves, 3);
+
+  // Your puzzle answer was `208191`.
+  if (!isTest) console.log(`Day 1.2: ${sum}`);
   return sum;
 }
-
-// Your puzzle answer was `208191`.
-console.log(`Day 1.2: ${sumN(sortedElves, 3)}`);

@@ -2,7 +2,41 @@ import { getLines } from "../../util/index.ts";
 
 const lines = getLines(import.meta.url);
 
-/*
+function everythingUnique(arr: unknown[], minLength = 4) {
+  return arr.length === new Set(arr).size && arr.length === minLength;
+}
+
+function findNUnique(input: string | string[], number: number): number {
+  const buffer: string[] = [];
+  let indexOfUnique = 0;
+
+  // Allow to pass in a line instead of a bunch of chars, so split them up
+  if (typeof input === "string") {
+    input = input.split("");
+  }
+
+  // Loop over each char
+  for (const [index, char] of input.entries()) {
+    // Make sure we only check `number` characters at once, so we delete the last
+    // item before pushing if the array has reached length
+    if (buffer.length === number) buffer.splice(0, 1);
+    buffer.push(char);
+
+    // Check if we have found all the uniques, save the value and break out
+    // of the for ... of loop
+    if (everythingUnique(buffer, number)) {
+      indexOfUnique = index;
+      break;
+    }
+  }
+
+  return indexOfUnique + 1;
+}
+
+// Input is only on one line, so we only process the first (0th) line
+const stream = lines[0];
+
+/**
 --- Day 6: Tuning Trouble ---
 
 The preparations are finally complete; you and the Elves leave camp on foot
@@ -59,9 +93,18 @@ Here are a few more examples:
   - `nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg`: first marker after character **`10`**
   - `zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw`: first marker after character **`11`**
 
-**How many characters need to be processed before the first start-of-packet
-marker is detected?**
+* **How many characters need to be processed before the first start-of-packet
+* marker is detected?**
+*/
+export function part1(isTest = false) {
+  const nUnique = findNUnique(stream, 4);
 
+  // Your puzzle answer was `1361`.
+  if (!isTest) console.log(`Day 6.1: ${nUnique}`);
+  return nUnique;
+}
+
+/**
 --- Part Two ---
 
 Your device's communication system is correctly detecting packets, but
@@ -79,45 +122,13 @@ above examples:
   - `nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg`: first marker after character **`29`**
   - `zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw`: first marker after character **`26`**
 
-**How many characters need to be processed before the first start-of-message
-marker is detected?**
+* **How many characters need to be processed before the first start-of-message
+* marker is detected?**
 */
+export function part2(isTest = false) {
+  const nUnique = findNUnique(stream, 14);
 
-const everythingUnique = (arr: unknown[], minLength = 4) =>
-  arr.length === new Set(arr).size && arr.length === minLength;
-
-function findNUnique(input: string | string[], number: number): number {
-  const buffer: string[] = [];
-  let indexOfUnique = 0;
-
-  // Allow to pass in a line instead of a bunch of chars, so split them up
-  if (typeof input === "string") {
-    input = input.split("");
-  }
-
-  // Loop over each char
-  for (const [index, char] of input.entries()) {
-    // Make sure we only check `number` characters at once, so we delete the last
-    // item before pushing if the array has reached length
-    if (buffer.length === number) buffer.splice(0, 1);
-    buffer.push(char);
-
-    // Check if we have found all the uniques, save the value and break out
-    // of the for ... of loop
-    if (everythingUnique(buffer, number)) {
-      indexOfUnique = index;
-      break;
-    }
-  }
-
-  return indexOfUnique + 1;
+  // Your puzzle answer was `3263`.
+  if (!isTest) console.log(`Day 6.2: ${nUnique}`);
+  return nUnique;
 }
-
-// Input is only on one line, so we only process the first (0th) line
-const stream = lines[0];
-
-// Your puzzle answer was `1361`.
-console.log(`Day 6.1: ${findNUnique(stream, 4)}`);
-
-// Your puzzle answer was `3263`.
-console.log(`Day 6.2: ${findNUnique(stream, 14)}`);

@@ -1,8 +1,26 @@
 import { getLines } from "../../util/index.ts";
 
-const lines = getLines(import.meta.url).filter((line) => line !== '');
+const lines = getLines(import.meta.url).filter((line) => line !== "");
 
-/*
+type Range = {
+  start: number;
+  end: number;
+};
+type Pair = [Range, Range];
+
+const pairs: Pair[] = lines.map((line): Pair => {
+  const [elf1, elf2] = line.split(",");
+
+  const [elf1Start, elf1End] = elf1.split("-").map((s) => parseInt(s, 10));
+  const [elf2Start, elf2End] = elf2.split("-").map((s) => parseInt(s, 10));
+
+  return [
+    { start: elf1Start, end: elf1End },
+    { start: elf2Start, end: elf2End },
+  ];
+});
+
+/**
 --- Day 4: Camp Cleanup ---
 
 Space needs to be cleared before the last supplies can be unloaded from the
@@ -67,43 +85,27 @@ the pair would be exclusively cleaning sections their partner will already
 be cleaning, so these seem like the most in need of reconsideration. In
 this example, there are `2` such pairs.
 
-**In how many assignment pairs does one range fully contain the other?**
+* **In how many assignment pairs does one range fully contain the other?**
 */
+export function part1(isTest = false) {
+  let fullyOverlappingPairs = 0;
 
-type Range = {
-  start: number;
-  end: number;
-};
-type Pair = [Range, Range];
+  for (const pair of pairs) {
+    const [elf1, elf2] = pair;
 
-const pairs: Pair[] = lines.map((line): Pair => {
-  const [elf1, elf2] = line.split(',');
-
-  const [elf1Start, elf1End] = elf1.split('-').map((s) => parseInt(s, 10));
-  const [elf2Start, elf2End] = elf2.split('-').map((s) => parseInt(s, 10));
-
-  return [
-    { start: elf1Start, end: elf1End },
-    { start: elf2Start, end: elf2End },
-  ];
-});
-
-let fullyOverlappingPairs = 0;
-
-for (const pair of pairs) {
-  const [elf1, elf2] = pair;
-
-  if (elf1.start <= elf2.start && elf1.end >= elf2.end) {
-    fullyOverlappingPairs++;
-  } else if (elf2.start <= elf1.start && elf2.end >= elf1.end) {
-    fullyOverlappingPairs++;
+    if (elf1.start <= elf2.start && elf1.end >= elf2.end) {
+      fullyOverlappingPairs++;
+    } else if (elf2.start <= elf1.start && elf2.end >= elf1.end) {
+      fullyOverlappingPairs++;
+    }
   }
+
+  // Your puzzle answer was `560`.
+  if (!isTest) console.log(`Day 4.1: ${fullyOverlappingPairs}`);
+  return fullyOverlappingPairs;
 }
 
-// Your puzzle answer was `560`.
-console.log(`Day 4.1: ${fullyOverlappingPairs}`);
-
-/*
+/**
 --- Part Two ---
 
 It seems like there is still quite a bit of duplicate work planned.
@@ -121,20 +123,22 @@ overlap, while the remaining four pairs (`5-7,7-9`, `2-8,3-7`, `6-6,4-6`, and
 
 So, in this example, the number of overlapping assignment pairs is `4`.
 
-**In how many assignment pairs do the ranges overlap?**
+* **In how many assignment pairs do the ranges overlap?**
 */
+export function part2(isTest = false) {
+  let partlyOverlappingPairs = 0;
 
-let partlyOverlappingPairs = 0;
+  for (const pair of pairs) {
+    const [elf1, elf2] = pair;
 
-for (const pair of pairs) {
-  const [elf1, elf2] = pair;
-
-  if (elf1.end >= elf2.start && elf1.start <= elf2.end) {
-    partlyOverlappingPairs++;
-  } else if (elf2.end >= elf1.start && elf2.start <= elf1.end) {
-    partlyOverlappingPairs++;
+    if (elf1.end >= elf2.start && elf1.start <= elf2.end) {
+      partlyOverlappingPairs++;
+    } else if (elf2.end >= elf1.start && elf2.start <= elf1.end) {
+      partlyOverlappingPairs++;
+    }
   }
-}
 
-// Your puzzle answer was `839`.
-console.log(`Day 4.2: ${partlyOverlappingPairs}`);
+  // Your puzzle answer was `839`.
+  if (!isTest) console.log(`Day 4.2: ${partlyOverlappingPairs}`);
+  return partlyOverlappingPairs;
+}

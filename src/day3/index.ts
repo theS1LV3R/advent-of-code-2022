@@ -1,8 +1,17 @@
 import { getLines } from "../../util/index.ts";
 
-const lines = getLines(import.meta.url).filter((line) => line !== '');
+const lines = getLines(import.meta.url).filter((line) => line !== "");
 
-/*
+const pointsMap: Record<string, number> = {};
+for (let i = 1; i <= 26; i++) {
+  const capitalChar = String.fromCharCode(i + 64);
+  const lowerChar = String.fromCharCode(i + 96);
+
+  pointsMap[lowerChar] = i;
+  pointsMap[capitalChar] = i + 26;
+}
+
+/**
 --- Day 3: Rucksack Reorganization ---
 
 One Elf has the important job of loading all of the rucksacks with supplies
@@ -62,42 +71,35 @@ and 19 (`s`); the sum of these is **`157`**.
 Find the item type that appears in both compartments of each rucksack. **What
 is the sum of the priorities of those item types?**
 */
+export function part1(isTest = false) {
+  const sacks = lines.map((line) => [
+    line.substring(0, line.length / 2),
+    line.substring(line.length / 2),
+  ]);
 
-const pointsMap: Record<string, number> = {};
-for (let i = 1; i <= 26; i++) {
-  const capitalChar = String.fromCharCode(i + 64);
-  const lowerChar = String.fromCharCode(i + 96);
+  const inBoth = sacks.map((line) => {
+    const seen = line[0].split("");
+    let inBothInternal = "";
 
-  pointsMap[lowerChar] = i;
-  pointsMap[capitalChar] = i + 26;
-}
+    line[1].split("").forEach((char) => {
+      if (seen.includes(char)) {
+        inBothInternal = char;
+      }
+    });
 
-const sacks = lines.map((line) => [
-  line.substring(0, line.length / 2),
-  line.substring(line.length / 2),
-]);
-
-const inBoth = sacks.map((line) => {
-  const seen = line[0].split('');
-  let inBothInternal = '';
-
-  line[1].split('').forEach((char) => {
-    if (seen.includes(char)) {
-      inBothInternal = char;
-    }
+    return inBothInternal;
   });
 
-  return inBothInternal;
-});
+  const points = inBoth
+    .map((char) => pointsMap[char])
+    .reduce((prev, cur) => prev + cur, 0);
 
-const points = inBoth
-  .map((char) => pointsMap[char])
-  .reduce((prev, cur) => prev + cur, 0);
+  // Your puzzle answer was `7990`.
+  if (!isTest) console.log(`Day 3.1: ${points}`);
+  return points;
+}
 
-// Your puzzle answer was `7990`.
-console.log(`Day 3.1: ${points}`);
-
-/*
+/**
 --- Part Two ---
 
 As you finish identifying the misplaced items, the Elves come to you with
@@ -147,45 +149,47 @@ for the second group. The sum of these is **`70`**.
 Find the item type that corresponds to the badges of each three-Elf group.
 **What is the sum of the priorities of those item types?**
 */
+export function part2(isTest = false) {
+  const groups: string[][] = [];
+  lines.forEach((line, index) => {
+    const groupNumber = (index - (index % 3)) / 3;
 
-const groups: string[][] = [];
-lines.forEach((line, index) => {
-  const groupNumber = (index - (index % 3)) / 3;
+    if (groups[groupNumber] === undefined) {
+      groups[groupNumber] = [];
+    }
 
-  if (groups[groupNumber] === undefined) {
-    groups[groupNumber] = [];
-  }
-
-  groups[groupNumber].push(line);
-});
-
-const groupSame = groups.map((group) => {
-  const seen: Record<string, number> = {};
-
-  group.forEach((member) => {
-    const seenInMember: string[] = [];
-    member.split('').forEach((char) => {
-      if (seenInMember.includes(char)) {
-        return;
-      } else {
-        seenInMember.push(char);
-      }
-
-      if (seen[char]) {
-        seen[char] += 1;
-      } else {
-        seen[char] = 1;
-      }
-    });
+    groups[groupNumber].push(line);
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return Object.entries(seen).find(([_k, v]) => v === 3)![0];
-});
+  const groupSame = groups.map((group) => {
+    const seen: Record<string, number> = {};
 
-const groupPoints = groupSame
-  .map((char) => pointsMap[char])
-  .reduce((prev, cur) => prev + cur, 0);
+    group.forEach((member) => {
+      const seenInMember: string[] = [];
+      member.split("").forEach((char) => {
+        if (seenInMember.includes(char)) {
+          return;
+        } else {
+          seenInMember.push(char);
+        }
 
-// Your puzzle answer was `2602`.
-console.log(`Day 3.2: ${groupPoints}`);
+        if (seen[char]) {
+          seen[char] += 1;
+        } else {
+          seen[char] = 1;
+        }
+      });
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return Object.entries(seen).find(([_k, v]) => v === 3)![0];
+  });
+
+  const groupPoints = groupSame
+    .map((char) => pointsMap[char])
+    .reduce((prev, cur) => prev + cur, 0);
+
+  // Your puzzle answer was `2602`.
+  if (!isTest) console.log(`Day 3.2: ${groupPoints}`);
+  return groupPoints;
+}
