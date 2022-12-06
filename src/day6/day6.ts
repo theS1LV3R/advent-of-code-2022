@@ -116,5 +116,8 @@ function findNUnique(input: string | string[], number: number): number {
 // Input is only on one line, so we only process the first (0th) line
 const stream = lines[0];
 
+// Your puzzle answer was `1361`.
 console.log(`Day 6.1: ${findNUnique(stream, 4)}`);
+
+// Your puzzle answer was `3263`.
 console.log(`Day 6.2: ${findNUnique(stream, 14)}`);
