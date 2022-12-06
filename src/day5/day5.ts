@@ -109,9 +109,7 @@ function loadStacks() {
     if (line.startsWith(' 1   2')) break; // First line of just numbers
 
     for (let row = 0; row < ROWS; row++) {
-      let content = line.slice(row * ROW_WIDTH, row * ROW_WIDTH + ROW_WIDTH);
-      if (content.length === 4) content = content.slice(0, -1);
-      const letter = content.slice(1, -1);
+      const letter = line[row * ROW_WIDTH + 1];
 
       if (letter === ' ') continue;
 
@@ -135,16 +133,13 @@ function moveCrates(
 }
 
 function getInstr(line: string) {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const instruction =
-    /move (?<count>[\d]+) from (?<source>[\d]+) to (?<dest>[\d]+)/gi.exec(line);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    /move (?<count>\d+) from (?<source>\d+) to (?<dest>\d+)/gi.exec(line)!;
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const count = parseInt(instruction!.groups!.count, 10);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const source = parseInt(instruction!.groups!.source, 10) - 1;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const dest = parseInt(instruction!.groups!.dest, 10) - 1;
+  const count = parseInt(instruction[1]);
+  const source = parseInt(instruction[2]) - 1;
+  const dest = parseInt(instruction[3]) - 1;
 
   return { count, source, dest };
 }
