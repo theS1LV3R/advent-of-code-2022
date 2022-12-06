@@ -10,5 +10,6 @@
   },
   "[typescript]": {
     "editor.rulers": [80]
-  }
+  },
+  "typescript.preferences.quoteStyle": "single"
 }
