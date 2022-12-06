@@ -8,4 +8,6 @@ for (const { name } of days) {
 
   part1();
   part2();
+
+  console.log("");
 }
